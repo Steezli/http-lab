@@ -1,10 +1,25 @@
 const { createServer } = require('http');
+const fs = require('fs');
+const { parse } = require('url');
 
 const server = createServer((req, res) => {
+  const pathname = parse(req.url).pathname;
   res.statusCode = 200;
-  res.setHeader('Content-Type', 'text/plain');
-  res.end('screw you brah');
-  console.log('requested');
+  res.setHeader('Content-Type', 'text/html');
+
+  const readFile = pathname => {
+    fs.readFile(`./public/${pathname}`, { encoding: 'utf8' }, (err, content) => {
+      console.log(pathname);
+      if(!content) {
+        res.statusCode = 404;
+        res.end('404: Page Not Found!');
+      } else {
+        res.end(content);
+      }
+    });
+  };
+  readFile(pathname);
 });
+
 
 module.exports = server;
