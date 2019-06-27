@@ -7,5 +7,4 @@ const server = createServer((req, res) => {
   console.log('requested');
 });
 
-
 module.exports = server;
